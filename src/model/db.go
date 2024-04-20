@@ -17,6 +17,7 @@ import (
 	"Yearning-go/src/i18n"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/cookieY/yee/logger"
@@ -112,7 +113,7 @@ func InitDSN(dsn DSN) (string, error) {
 		isTLS = true
 		certPool := x509.NewCertPool()
 		if ok := certPool.AppendCertsFromPEM([]byte(dsn.CA)); !ok {
-			return "", fmt.Errorf("failed to append ca certs")
+			return "", errors.New("failed to append ca certs")
 		}
 		clientCert := make([]tls.Certificate, 0, 1)
 		certs, err := tls.X509KeyPair([]byte(dsn.Cert), []byte(dsn.Key))
